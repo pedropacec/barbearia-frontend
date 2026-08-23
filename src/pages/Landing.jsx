@@ -44,7 +44,7 @@ export default function Landing() {
 
       {/* Hero */}
       <header className="hero" id="topo">
-        <p className="hero__eyebrow">Est. 2023 · Barbearia de bairro · São Paulo</p>
+        <p className="hero__eyebrow">Est. 2023 · Barbearia clássica · São Paulo</p>
         <h1 className="hero__title">
           O clássico nunca
           <br />
@@ -62,7 +62,7 @@ export default function Landing() {
             Ver serviços
           </a>
         </div>
-        <p className="hero__proof">★★★★★ <strong>4,9</strong> no bairro · mais de 3.000 cortes desde 2023</p>
+        <p className="hero__proof">★★★★★ <strong>4,9</strong> de avaliação · mais de 3.000 cortes desde 2023</p>
         <figure className="hero__photo">
           <img
             src="/img/hero.jpg"
@@ -117,7 +117,7 @@ export default function Landing() {
             <p className="band__eyebrow">Desde 2023 no mesmo endereço</p>
             <h2 className="band__title">Uma cadeira com o seu nome</h2>
             <p className="band__text">
-              A Barbearia Vintage nasceu para ser a barbearia do bairro: aquela em que o barbeiro
+              A Barbearia Vintage nasceu para ser a barbearia de sempre: aquela em que o barbeiro
               sabe seu nome, lembra como você gosta do corte e recebe você com café passado na hora.
               Cada cliente tem uma ficha com suas preferências — máquina, tesoura, alergias — para
               que qualquer cadeira seja a sua cadeira.
