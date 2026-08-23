@@ -1,30 +1,33 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import { useAuth } from "./auth.jsx";
+import Landing from "./pages/Landing.jsx";
 import Login from "./pages/Login.jsx";
 import Agenda from "./pages/Agenda.jsx";
 import Clients from "./pages/Clients.jsx";
 import Layout from "./components/Layout.jsx";
 
+// Rota interna: exige funcionário autenticado
+function Protected({ user, children }) {
+  if (!user) return <Navigate to="/login" replace />;
+  return <Layout>{children}</Layout>;
+}
+
 export default function App() {
   const { user } = useAuth();
 
-  // Sem login, qualquer rota cai na tela de entrada
-  if (!user) {
-    return (
-      <Routes>
-        <Route path="*" element={<Login />} />
-      </Routes>
-    );
-  }
-
   return (
-    <Layout>
-      <Routes>
-        <Route path="/" element={<Navigate to="/agenda" replace />} />
-        <Route path="/agenda" element={<Agenda />} />
-        <Route path="/clientes" element={<Clients />} />
-        <Route path="*" element={<Navigate to="/agenda" replace />} />
-      </Routes>
-    </Layout>
+    <Routes>
+      {/* Página pública da barbearia (vista pelo cliente) */}
+      <Route path="/" element={<Landing />} />
+
+      {/* Entrada do sistema interno */}
+      <Route path="/login" element={user ? <Navigate to="/agenda" replace /> : <Login />} />
+
+      {/* Sistema interno (funcionários) */}
+      <Route path="/agenda" element={<Protected user={user}><Agenda /></Protected>} />
+      <Route path="/clientes" element={<Protected user={user}><Clients /></Protected>} />
+
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
   );
 }
