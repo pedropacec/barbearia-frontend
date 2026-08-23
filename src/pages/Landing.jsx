@@ -9,17 +9,11 @@ const WHATSAPP_URL =
   "https://wa.me/5511999990000?text=Ol%C3%A1!%20Quero%20agendar%20um%20hor%C3%A1rio%20na%20Barbearia%20Vintage.";
 
 const SERVICES = [
-  { name: "Corte", price: "R$ 60", desc: "Tesoura e máquina, acabamento na navalha e toalha quente." },
-  { name: "Barba", price: "R$ 45", desc: "Navalha, toalha quente e balm — o ritual completo." },
-  { name: "Corte + Barba", price: "R$ 95", desc: "O combo da casa. Saia pronto para qualquer ocasião.", featured: true },
-  { name: "Sobrancelha", price: "R$ 20", desc: "Alinhamento na navalha, natural e discreto." },
+  { name: "Corte", price: "R$ 60", desc: "Na tesoura e na máquina, com acabamento de navalha." },
+  { name: "Barba", price: "R$ 45", desc: "O ritual completo de navalha e toalha quente." },
+  { name: "Corte + Barba", price: "R$ 95", desc: "Corte completo e barba feita numa sessão só.", featured: true },
+  { name: "Sobrancelha", price: "R$ 20", desc: "Alinhamento discreto, feito na navalha." },
   { name: "Acabamento (pezinho)", price: "R$ 25", desc: "Contorno renovado entre um corte e outro." },
-];
-
-const TESTIMONIALS = [
-  { quote: "Único lugar onde eu não preciso explicar o corte. Sentei, conversei, saí novo.", name: "João F.", detail: "cliente há 3 anos" },
-  { quote: "A barba na toalha quente é outro nível. Virou meu programa de sábado.", name: "Rafael S.", detail: "cliente desde a inauguração" },
-  { quote: "Marquei pelo WhatsApp às 9h, às 10h já estava na cadeira. Respeitam seu tempo.", name: "André O.", detail: "cliente há 1 ano" },
 ];
 
 export default function Landing() {
@@ -51,8 +45,8 @@ export default function Landing() {
           sai de <em>moda.</em>
         </h1>
         <p className="hero__sub">
-          Corte, barba e navalha na toalha quente — sem pressa, do jeito que deve ser.
-          Marque seu horário em um minuto pelo WhatsApp.
+          Cortes clássicos e barba feita na navalha, sempre com hora marcada.
+          Chame no WhatsApp e escolha seu horário em um minuto.
         </p>
         <div className="hero__cta">
           <a className="btn btn--primary btn--lg" href={WHATSAPP_URL} target="_blank" rel="noreferrer">
@@ -62,7 +56,7 @@ export default function Landing() {
             Ver serviços
           </a>
         </div>
-        <p className="hero__proof">★★★★★ <strong>4,9</strong> de avaliação · mais de 3.000 cortes desde 2023</p>
+        <p className="hero__proof">Há três anos atendendo com hora marcada em São Paulo.</p>
         <figure className="hero__photo">
           <img
             src="/img/hero.jpg"
@@ -74,7 +68,6 @@ export default function Landing() {
       {/* Serviços */}
       <section className="band" id="servicos">
         <div className="band__inner">
-          <p className="band__eyebrow">Tabela da casa</p>
           <h2 className="band__title">Serviços</h2>
           <div className="svc-grid">
             {SERVICES.map((s) => (
@@ -114,17 +107,15 @@ export default function Landing() {
       <section className="band band--warm" id="a-casa">
         <div className="band__inner band__inner--split">
           <div>
-            <p className="band__eyebrow">Desde 2023 no mesmo endereço</p>
             <h2 className="band__title">Uma cadeira com o seu nome</h2>
             <p className="band__text">
               A Barbearia Vintage nasceu para ser a barbearia de sempre: aquela em que o barbeiro
-              sabe seu nome, lembra como você gosta do corte e recebe você com café passado na hora.
-              Cada cliente tem uma ficha com suas preferências — máquina, tesoura, alergias — para
-              que qualquer cadeira seja a sua cadeira.
+              sabe seu nome e lembra como você gosta do corte. Cada cliente tem uma ficha com as
+              próprias preferências, e qualquer cadeira vira a sua cadeira.
             </p>
             <p className="band__text">
-              Agendou, chegou, sentou. Aqui seu horário é respeitado — confirmamos cada agendamento
-              por e-mail e o barbeiro já está esperando por você.
+              Seu horário é respeitado. Cada agendamento é confirmado por e-mail e o barbeiro já
+              está esperando quando você chega.
             </p>
             <figure className="photo-frame">
               <img src="/img/casa-pole.jpg" alt="Barber pole e letreiro na fachada da barbearia" loading="lazy" />
@@ -147,7 +138,7 @@ export default function Landing() {
               </div>
               <div>
                 <dt>Agendamento</dt>
-                <dd>WhatsApp ou telefone<br />(11) 99999-0000</dd>
+                <dd>Pelo WhatsApp da casa, com confirmação por e-mail</dd>
               </div>
             </dl>
               <a className="btn btn--primary btn--block" href={WHATSAPP_URL} target="_blank" rel="noreferrer">
@@ -158,28 +149,10 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* Depoimentos */}
-      <section className="band">
-        <div className="band__inner">
-          <p className="band__eyebrow">Quem senta na cadeira, volta</p>
-          <h2 className="band__title">Palavra de cliente</h2>
-          <div className="quote-grid">
-            {TESTIMONIALS.map((t) => (
-              <blockquote className="quote" key={t.name}>
-                <p>“{t.quote}”</p>
-                <footer>
-                  <strong>{t.name}</strong> · {t.detail}
-                </footer>
-              </blockquote>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* CTA final */}
       <section className="closer">
         <h2>Seu horário te espera.</h2>
-        <p>Sem fila, sem espera, sem surpresa. Agende agora e chegue na hora certa.</p>
+        <p>Agende pelo WhatsApp e chegue na hora marcada. A cadeira estará pronta.</p>
         <a className="btn btn--lg closer__btn" href={WHATSAPP_URL} target="_blank" rel="noreferrer">
           Agendar pelo WhatsApp
         </a>
@@ -189,7 +162,7 @@ export default function Landing() {
       <footer className="site-foot">
         <div className="site-foot__inner">
           <span className="site-foot__brand">
-            Barbearia <em>Vintage</em> — Est. 2023
+            Barbearia <em>Vintage</em> · Est. 2023
           </span>
           <Link to="/login" className="site-foot__staff">
             Área do funcionário

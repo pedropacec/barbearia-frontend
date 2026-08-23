@@ -1252,40 +1252,6 @@ html {
   margin-top: 8px;
 }
 
-/* Depoimentos */
-.quote-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 18px;
-}
-
-.quote {
-  background: var(--card);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow-stamp);
-  padding: 26px 24px 20px;
-}
-
-.quote p {
-  font-family: var(--font-display);
-  font-style: italic;
-  font-size: 1.05rem;
-  line-height: 1.5;
-  margin-bottom: 16px;
-}
-
-.quote footer {
-  font-size: 0.82rem;
-  color: var(--ink-soft);
-  border-top: 1px solid var(--line);
-  padding-top: 12px;
-}
-
-.quote footer strong {
-  color: var(--ink);
-}
-
 /* CTA final */
 .closer {
   background: var(--oxblood);
@@ -1363,10 +1329,6 @@ html {
   .band__inner--split {
     grid-template-columns: 1fr;
     gap: 36px;
-  }
-
-  .quote-grid {
-    grid-template-columns: 1fr;
   }
 
   .site-nav__links {
