@@ -83,3 +83,11 @@ export const api = {
     }),
   deleteAppointment: (id) => request(`/api/appointments/${id}`, { method: "DELETE" }),
 };
+
+// Rotas públicas do agendamento online (não exigem login)
+export const publicApi = {
+  getServices: () => request("/api/public/services"),
+  getAvailability: (date) => request(`/api/public/availability?date=${date}`),
+  createBooking: (data) =>
+    request("/api/public/bookings", { method: "POST", body: JSON.stringify(data) }),
+};

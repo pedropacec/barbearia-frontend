@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import BookingPanel from "../components/BookingPanel.jsx";
 
 // Página pública da barbearia — foco em marca e conversão.
 // O agendamento do cliente acontece pelo WhatsApp (fluxo real da
@@ -29,7 +30,7 @@ export default function Landing() {
             <a href="#servicos">Serviços</a>
             <a href="#a-casa">A casa</a>
           </div>
-          <a className="btn btn--primary" href={WHATSAPP_URL} target="_blank" rel="noreferrer">
+          <a className="btn btn--primary" href="#agendar">
             Agendar horário
           </a>
         </div>
@@ -46,11 +47,11 @@ export default function Landing() {
         </h1>
         <p className="hero__sub">
           Cortes clássicos e barba feita na navalha, sempre com hora marcada.
-          Chame no WhatsApp e escolha seu horário em um minuto.
+          Escolha seu horário aqui mesmo, em menos de um minuto.
         </p>
         <div className="hero__cta">
-          <a className="btn btn--primary btn--lg" href={WHATSAPP_URL} target="_blank" rel="noreferrer">
-            Agendar pelo WhatsApp
+          <a className="btn btn--primary btn--lg" href="#agendar">
+            Agendar horário
           </a>
           <a className="btn btn--ghost btn--lg" href="#servicos">
             Ver serviços
@@ -83,7 +84,7 @@ export default function Landing() {
             ))}
           </div>
           <div className="band__cta">
-            <a className="btn btn--primary" href={WHATSAPP_URL} target="_blank" rel="noreferrer">
+            <a className="btn btn--primary" href="#agendar">
               Garantir meu horário
             </a>
           </div>
@@ -101,6 +102,14 @@ export default function Landing() {
         <figure>
           <img src="/img/oficio-3.jpg" alt="Riscado do corte feito na navalha" loading="lazy" />
         </figure>
+      </section>
+
+      {/* Agendamento online */}
+      <section className="band" id="agendar">
+        <div className="band__inner">
+          <h2 className="band__title">Agende seu horário</h2>
+          <BookingPanel />
+        </div>
       </section>
 
       {/* A casa */}
@@ -152,9 +161,9 @@ export default function Landing() {
       {/* CTA final */}
       <section className="closer">
         <h2>Seu horário te espera.</h2>
-        <p>Agende pelo WhatsApp e chegue na hora marcada. A cadeira estará pronta.</p>
-        <a className="btn btn--lg closer__btn" href={WHATSAPP_URL} target="_blank" rel="noreferrer">
-          Agendar pelo WhatsApp
+        <p>Escolha o horário, receba a confirmação por e-mail e chegue na hora marcada.</p>
+        <a className="btn btn--lg closer__btn" href="#agendar">
+          Agendar horário
         </a>
       </section>
 
