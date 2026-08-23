@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import { useAuth } from "../auth.jsx";
 
 export default function Login() {
@@ -67,11 +66,7 @@ export default function Login() {
           </button>
         </form>
 
-        <p className="login-hint">
-          Acesso restrito aos funcionários da barbearia.
-          <br />
-          <Link to="/">← Voltar ao site</Link>
-        </p>
+        <p className="login-hint">Acesso restrito aos funcionários da barbearia.</p>
       </div>
     </div>
   );

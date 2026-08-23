@@ -28,8 +28,7 @@ Copie `.env.example` para `.env` — a única variável é `VITE_API_URL` aponta
 
 ## Telas
 
-- **Site público (`/`)** — a página vista pelo cliente da barbearia, focada em marca e conversão: hero editorial, menu de serviços com preços, informações da casa, depoimentos e CTAs de agendamento via WhatsApp (o canal real de agendamento do cliente, conforme o case). O rodapé leva à Área do funcionário.
-- **Login (`/login`)** — autentica contra a API; o token JWT fica no localStorage e a sessão é restaurada ao recarregar.
+- **Login (`/login`)** — autentica contra a API; o token JWT fica no localStorage e a sessão é restaurada ao recarregar. Qualquer rota sem sessão válida redireciona para cá.
 - **Agenda** — agendamentos agrupados por dia e ordenados por horário, com filtros (Hoje / Próximos 7 dias / Todos), destaque para o dia atual, mudança de status em um clique (com atualização otimista), edição e remoção com confirmação.
 - **Clientes** — fichas de cliente em grade (inspiradas nos fichários das barbearias clássicas e em franquias como Truefitt & Hill, Pall Mall Barbers e V's Barbershop): monograma, número de registro, preferências anotadas e contagem de atendimentos, com busca por nome/email, cadastro, edição e remoção (avisando que os agendamentos vinculados também são removidos).
 
