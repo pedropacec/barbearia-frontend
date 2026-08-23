@@ -30,7 +30,7 @@ Copie `.env.example` para `.env` — a única variável é `VITE_API_URL` aponta
 
 - **Login** — autentica contra a API; o token JWT fica no localStorage e a sessão é restaurada ao recarregar.
 - **Agenda** — agendamentos agrupados por dia e ordenados por horário, com filtros (Hoje / Próximos 7 dias / Todos), destaque para o dia atual, mudança de status em um clique (com atualização otimista), edição e remoção com confirmação.
-- **Clientes** — tabela com busca por nome/email, cadastro, edição e remoção (avisando que os agendamentos vinculados também são removidos).
+- **Clientes** — fichas de cliente em grade (inspiradas nos fichários das barbearias clássicas e em franquias como Truefitt & Hill, Pall Mall Barbers e V's Barbershop): monograma, número de registro, preferências anotadas e contagem de atendimentos, com busca por nome/email, cadastro, edição e remoção (avisando que os agendamentos vinculados também são removidos).
 
 ## Decisões de UX (usuários leigos)
 

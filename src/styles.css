@@ -619,72 +619,144 @@ body::before {
   color: var(--ink-faint);
 }
 
-.table-card {
+/* Fichas de cliente — inspiração: fichários de barbearias clássicas
+   (V's Barbershop), monogramas heritage (Pall Mall Barbers) e a
+   tipografia espaçada em caixa alta de Truefitt & Hill. */
+
+.client-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 18px;
+}
+
+.client-card {
   background: var(--card);
   border: 1px solid var(--line-strong);
+  border-top: 3px double var(--line-strong);
   border-radius: var(--radius);
   box-shadow: var(--shadow-stamp);
-  overflow: hidden;
+  padding: 20px 22px 16px;
+  display: flex;
+  flex-direction: column;
+  animation: rise 0.4s ease both;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
 }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
+.client-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 5px 8px 0 rgba(41, 32, 26, 0.1);
 }
 
-thead th {
-  font-size: 0.74rem;
-  font-weight: 800;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--ink-soft);
-  text-align: left;
-  padding: 13px 18px;
+.client-card__top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+/* Monograma em anel de latão, serif lapidar */
+.client-card__monogram {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 1.5px solid var(--brass);
+  box-shadow: inset 0 0 0 3px var(--card), inset 0 0 0 4px var(--brass-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.15rem;
+  letter-spacing: 0.06em;
+  color: var(--oxblood);
   background: var(--paper-warm);
-  border-bottom: 1px solid var(--line-strong);
+  flex-shrink: 0;
 }
 
-tbody td {
-  padding: 14px 18px;
-  border-bottom: 1px solid var(--line);
-  font-size: 0.95rem;
-  vertical-align: middle;
+/* Número de registro — carimbo de tinta levemente torto */
+.client-card__number {
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--oxblood);
+  border: 1px solid rgba(142, 47, 46, 0.45);
+  border-radius: 3px;
+  padding: 4px 8px;
+  transform: rotate(2deg);
+  opacity: 0.85;
 }
 
-tbody tr:last-child td {
-  border-bottom: none;
+.client-card__name {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.3rem;
+  line-height: 1.15;
+  margin-bottom: 2px;
 }
 
-tbody tr {
-  transition: background 0.12s;
-}
-
-tbody tr:hover {
-  background: #f6f0e2;
-}
-
-td.td-name strong {
-  display: block;
-}
-
-td.td-notes {
+.client-card__email {
+  font-size: 0.86rem;
   color: var(--ink-soft);
-  font-size: 0.88rem;
-  max-width: 260px;
-}
-
-td.td-count {
-  color: var(--ink-soft);
-  font-variant-numeric: tabular-nums;
-}
-
-td.td-actions {
-  text-align: right;
+  margin-bottom: 14px;
+  overflow: hidden;
+  text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-td.td-actions .icon-btn + .icon-btn {
-  margin-left: 6px;
+/* Preferências — a anotação "à mão" do barbeiro na ficha */
+.client-card__prefs {
+  border-top: 1px solid var(--line);
+  padding-top: 12px;
+  margin-bottom: 14px;
+  flex: 1;
+}
+
+.client-card__label {
+  display: block;
+  font-size: 0.64rem;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--brass);
+  margin-bottom: 6px;
+}
+
+.client-card__prefs p {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 0.98rem;
+  line-height: 1.45;
+  color: var(--ink);
+}
+
+.client-card__prefs p.is-blank {
+  color: var(--ink-faint);
+}
+
+.client-card__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--line);
+  padding-top: 12px;
+}
+
+.client-card__visits {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--ink-soft);
+  background: var(--paper-warm);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 4px 12px;
+}
+
+.client-card__actions {
+  display: flex;
+  gap: 6px;
 }
 
 /* ============================ VAZIO / LOADING ============================ */
@@ -876,10 +948,7 @@ td.td-actions .icon-btn + .icon-btn {
     grid-template-columns: 1fr;
   }
 
-  td.td-notes,
-  th.th-notes,
-  td.td-count,
-  th.th-count {
-    display: none;
+  .client-grid {
+    grid-template-columns: 1fr;
   }
 }

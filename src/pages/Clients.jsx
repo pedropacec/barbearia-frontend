@@ -4,6 +4,14 @@ import { useToast } from "../toast.jsx";
 import ClientForm from "../components/ClientForm.jsx";
 import ConfirmDialog from "../components/ConfirmDialog.jsx";
 
+// Iniciais para o monograma da ficha (primeiro + último nome)
+function initials(name) {
+  const parts = name.trim().split(/\s+/);
+  const first = parts[0]?.[0] ?? "";
+  const last = parts.length > 1 ? parts[parts.length - 1][0] : "";
+  return (first + last).toUpperCase();
+}
+
 export default function Clients() {
   const toast = useToast();
   const [clients, setClients] = useState(null);
@@ -76,7 +84,7 @@ export default function Clients() {
         <div>
           <h2>Clientes</h2>
           <p className="sub">
-            {clients.length} {clients.length === 1 ? "cliente cadastrado" : "clientes cadastrados"}.
+            {clients.length} {clients.length === 1 ? "cliente" : "clientes"} no registro da casa.
           </p>
         </div>
         <button
@@ -117,27 +125,37 @@ export default function Clients() {
           )}
         </div>
       ) : (
-        <div className="table-card">
-          <table>
-            <thead>
-              <tr>
-                <th>Nome</th>
-                <th>Email</th>
-                <th className="th-notes">Observações</th>
-                <th className="th-count">Atendimentos</th>
-                <th />
-              </tr>
-            </thead>
-            <tbody>
-              {filtered.map((c) => (
-                <tr key={c.id}>
-                  <td className="td-name">
-                    <strong>{c.name}</strong>
-                  </td>
-                  <td>{c.email}</td>
-                  <td className="td-notes">{c.notes || "—"}</td>
-                  <td className="td-count">{c._count?.appointments ?? 0}</td>
-                  <td className="td-actions">
+        <div className="client-grid">
+          {filtered.map((c, i) => {
+            const visits = c._count?.appointments ?? 0;
+            return (
+              <article
+                className="client-card"
+                key={c.id}
+                style={{ animationDelay: `${Math.min(i * 45, 270)}ms` }}
+              >
+                <header className="client-card__top">
+                  <div className="client-card__monogram" aria-hidden="true">
+                    {initials(c.name)}
+                  </div>
+                  <span className="client-card__number">Ficha Nº {String(c.id).padStart(3, "0")}</span>
+                </header>
+
+                <h3 className="client-card__name">{c.name}</h3>
+                <p className="client-card__email">{c.email}</p>
+
+                <div className="client-card__prefs">
+                  <span className="client-card__label">Preferências da casa</span>
+                  <p className={c.notes ? "" : "is-blank"}>
+                    {c.notes || "Nenhuma anotação registrada."}
+                  </p>
+                </div>
+
+                <footer className="client-card__foot">
+                  <span className="client-card__visits">
+                    ✂ {visits} {visits === 1 ? "atendimento" : "atendimentos"}
+                  </span>
+                  <div className="client-card__actions">
                     <button
                       className="icon-btn"
                       title="Editar cliente"
@@ -155,11 +173,11 @@ export default function Clients() {
                     >
                       🗑
                     </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                  </div>
+                </footer>
+              </article>
+            );
+          })}
         </div>
       )}
 
