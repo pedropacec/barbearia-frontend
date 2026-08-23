@@ -1018,6 +1018,61 @@ html {
   color: var(--ink);
 }
 
+/* Fotografia — moldura de retrato antigo e tom quente unificado */
+.hero__photo {
+  max-width: 960px;
+  margin: 48px auto 0;
+}
+
+.hero__photo img,
+.photo-frame img,
+.gallery img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius);
+  border: 1px solid var(--line-strong);
+  box-shadow: var(--shadow-stamp);
+  filter: sepia(0.14) saturate(0.96) contrast(1.02);
+}
+
+.hero__photo img {
+  outline: 1px solid var(--line-strong);
+  outline-offset: 5px;
+}
+
+.photo-frame {
+  margin-top: 26px;
+}
+
+.gallery {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 24px 76px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.gallery figure {
+  overflow: hidden;
+  border-radius: var(--radius);
+}
+
+.gallery img {
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.35s ease;
+}
+
+.gallery figure:hover img {
+  transform: scale(1.03);
+}
+
+.band__aside .photo-frame {
+  margin: 0 0 22px;
+}
+
 /* Faixas de conteúdo */
 .band {
   padding: 76px 24px;
@@ -1316,6 +1371,10 @@ html {
 
   .site-nav__links {
     display: none;
+  }
+
+  .gallery {
+    grid-template-columns: 1fr;
   }
 }
 

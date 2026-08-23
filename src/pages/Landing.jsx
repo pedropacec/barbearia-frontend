@@ -63,6 +63,12 @@ export default function Landing() {
           </a>
         </div>
         <p className="hero__proof">★★★★★ <strong>4,9</strong> no bairro · mais de 3.000 cortes desde 2023</p>
+        <figure className="hero__photo">
+          <img
+            src="/img/hero.jpg"
+            alt="Cliente recebendo acabamento de barba na tesoura, reclinado na cadeira da barbearia"
+          />
+        </figure>
       </header>
 
       {/* Serviços */}
@@ -91,6 +97,19 @@ export default function Landing() {
         </div>
       </section>
 
+      {/* O ofício — fotos */}
+      <section className="gallery" aria-label="O ofício da casa">
+        <figure>
+          <img src="/img/oficio-1.jpg" alt="Barbeiro de chapéu e suspensórios alinhando o corte de um cliente" loading="lazy" />
+        </figure>
+        <figure>
+          <img src="/img/oficio-2.jpg" alt="Acabamento de barba feito na tesoura" loading="lazy" />
+        </figure>
+        <figure>
+          <img src="/img/oficio-3.jpg" alt="Riscado do corte feito na navalha" loading="lazy" />
+        </figure>
+      </section>
+
       {/* A casa */}
       <section className="band band--warm" id="a-casa">
         <div className="band__inner band__inner--split">
@@ -107,8 +126,15 @@ export default function Landing() {
               Agendou, chegou, sentou. Aqui seu horário é respeitado — confirmamos cada agendamento
               por e-mail e o barbeiro já está esperando por você.
             </p>
+            <figure className="photo-frame">
+              <img src="/img/casa-pole.jpg" alt="Barber pole e letreiro na fachada da barbearia" loading="lazy" />
+            </figure>
           </div>
-          <aside className="info-card">
+          <aside className="band__aside">
+            <figure className="photo-frame">
+              <img src="/img/casa-cadeira.jpg" alt="Cadeira clássica de barbeiro na luz da janela" loading="lazy" />
+            </figure>
+            <div className="info-card">
             <h3>Visite a casa</h3>
             <dl>
               <div>
@@ -124,9 +150,10 @@ export default function Landing() {
                 <dd>WhatsApp ou telefone<br />(11) 99999-0000</dd>
               </div>
             </dl>
-            <a className="btn btn--primary btn--block" href={WHATSAPP_URL} target="_blank" rel="noreferrer">
-              Chamar no WhatsApp
-            </a>
+              <a className="btn btn--primary btn--block" href={WHATSAPP_URL} target="_blank" rel="noreferrer">
+                Chamar no WhatsApp
+              </a>
+            </div>
           </aside>
         </div>
       </section>
