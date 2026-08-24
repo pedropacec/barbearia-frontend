@@ -1517,6 +1517,25 @@ html {
   color: var(--paper);
 }
 
+.site-foot__links {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  flex-wrap: wrap;
+}
+
+.site-foot__links a {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--paper);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.site-foot__links a:hover {
+  color: var(--brass-soft);
+}
+
 .site-foot__staff {
   font-size: 0.85rem;
   font-weight: 700;

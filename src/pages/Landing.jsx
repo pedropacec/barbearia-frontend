@@ -2,8 +2,25 @@ import { Link } from "react-router-dom";
 import BookingPanel from "../components/BookingPanel.jsx";
 
 // Página pública da barbearia — foco em marca e conversão.
-// O cliente agenda online, no próprio site (painel de agendamento);
-// o sistema interno de gestão fica em /login.
+// O cliente agenda online, no próprio site (painel de agendamento),
+// ou, se preferir, pelo WhatsApp — nesse caso o funcionário registra
+// o horário no sistema interno (/login).
+
+// Número fictício — trocar pelo WhatsApp real da barbearia.
+const WHATSAPP_NUMBER = "5511912345678";
+// Mensagem semi-pronta: o cliente só preenche as lacunas.
+const WHATSAPP_MESSAGE = [
+  "Olá! Gostaria de agendar um horário na Barbearia Vintage. ✂️",
+  "",
+  "• Serviço: ____",
+  "• Profissional: ____",
+  "• Data: ____",
+  "• Horário: ____",
+  "• Meu nome: ____",
+  "",
+  "Aguardo a confirmação, obrigado!",
+].join("\n");
+const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(WHATSAPP_MESSAGE)}`;
 
 const SERVICES = [
   { name: "Corte", price: "R$ 60", desc: "Na tesoura e na máquina, com acabamento de navalha." },
@@ -173,6 +190,12 @@ export default function Landing() {
           <span className="site-foot__brand">
             Barbearia <em>Vintage</em> · Est. 2023
           </span>
+          <nav className="site-foot__links">
+            <a href="#agendar">Agendar horário</a>
+            <a href={WHATSAPP_URL} target="_blank" rel="noreferrer">
+              Prefere WhatsApp? Fale com a gente
+            </a>
+          </nav>
           <Link to="/login" className="site-foot__staff">
             Área do funcionário
           </Link>
