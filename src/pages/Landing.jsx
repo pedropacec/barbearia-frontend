@@ -148,9 +148,6 @@ export default function Landing() {
             </figure>
           </div>
           <aside className="band__aside">
-            <figure className="photo-frame">
-              <img src="/img/casa-cadeira.jpg" alt="Cadeira clássica de barbeiro na luz da janela" loading="lazy" />
-            </figure>
             <div className="info-card">
             <h3>Visite a casa</h3>
             <dl>
