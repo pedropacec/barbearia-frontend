@@ -2,12 +2,8 @@ import { Link } from "react-router-dom";
 import BookingPanel from "../components/BookingPanel.jsx";
 
 // Página pública da barbearia — foco em marca e conversão.
-// O agendamento do cliente acontece pelo WhatsApp (fluxo real da
-// barbearia descrito no case); o sistema interno fica em /login.
-
-// Número fictício — troque pelo WhatsApp real da barbearia
-const WHATSAPP_URL =
-  "https://wa.me/5511999990000?text=Ol%C3%A1!%20Quero%20agendar%20um%20hor%C3%A1rio%20na%20Barbearia%20Vintage.";
+// O cliente agenda online, no próprio site (painel de agendamento);
+// o sistema interno de gestão fica em /login.
 
 const SERVICES = [
   { name: "Corte", price: "R$ 60", desc: "Na tesoura e na máquina, com acabamento de navalha." },
@@ -151,11 +147,11 @@ export default function Landing() {
               </div>
               <div>
                 <dt>Agendamento</dt>
-                <dd>Pelo WhatsApp da casa, com confirmação por e-mail</dd>
+                <dd>Online, aqui pelo site — com confirmação por e-mail</dd>
               </div>
             </dl>
-              <a className="btn btn--primary btn--block" href={WHATSAPP_URL} target="_blank" rel="noreferrer">
-                Chamar no WhatsApp
+              <a className="btn btn--primary btn--block" href="#agendar">
+                Agendar horário
               </a>
             </div>
           </aside>
