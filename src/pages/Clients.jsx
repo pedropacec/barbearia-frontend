@@ -12,6 +12,25 @@ function initials(name) {
   return (first + last).toUpperCase();
 }
 
+// "Há quanto tempo" desde o último corte concluído, em linguagem natural
+function timeSinceLastCut(lastCutAt) {
+  if (!lastCutAt) return "Ainda sem corte concluído";
+  const days = Math.floor((Date.now() - new Date(lastCutAt)) / 86400000);
+  if (days <= 0) return "Último corte: hoje";
+  if (days === 1) return "Último corte: ontem";
+  if (days < 30) return `Último corte: há ${days} dias`;
+  const months = Math.floor(days / 30);
+  return `Último corte: há ${months} ${months === 1 ? "mês" : "meses"}`;
+}
+
+// Só dígitos, para montar o link do WhatsApp
+function waLink(phone) {
+  const digits = String(phone).replace(/\D/g, "");
+  if (digits.length < 10) return null;
+  const full = digits.length <= 11 ? `55${digits}` : digits;
+  return `https://wa.me/${full}`;
+}
+
 export default function Clients() {
   const toast = useToast();
   const [clients, setClients] = useState(null);
@@ -143,6 +162,29 @@ export default function Clients() {
 
                 <h3 className="client-card__name">{c.name}</h3>
                 <p className="client-card__email">{c.email}</p>
+
+                <div className="client-card__contact">
+                  {c.phone ? (
+                    waLink(c.phone) ? (
+                      <a
+                        className="client-card__wa"
+                        href={waLink(c.phone)}
+                        target="_blank"
+                        rel="noreferrer"
+                        title="Abrir conversa no WhatsApp"
+                      >
+                        <span aria-hidden="true">✆</span> {c.phone}
+                      </a>
+                    ) : (
+                      <span className="client-card__wa is-plain">✆ {c.phone}</span>
+                    )
+                  ) : (
+                    <span className="client-card__wa is-blank">Sem WhatsApp</span>
+                  )}
+                  <span className={`client-card__lastcut ${c.lastCutAt ? "" : "is-blank"}`}>
+                    {timeSinceLastCut(c.lastCutAt)}
+                  </span>
+                </div>
 
                 <div className="client-card__prefs">
                   <span className="client-card__label">Preferências da casa</span>

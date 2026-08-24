@@ -721,10 +721,50 @@ body::before {
 .client-card__email {
   font-size: 0.86rem;
   color: var(--ink-soft);
-  margin-bottom: 14px;
+  margin-bottom: 10px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.client-card__contact {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 14px;
+}
+
+.client-card__wa {
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: var(--moss);
+  text-decoration: none;
+  width: fit-content;
+}
+
+.client-card__wa:hover {
+  text-decoration: underline;
+}
+
+.client-card__wa.is-plain {
+  color: var(--ink-soft);
+  font-weight: 600;
+}
+
+.client-card__wa.is-blank {
+  color: var(--ink-faint);
+  font-weight: 500;
+}
+
+.client-card__lastcut {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--brass);
+}
+
+.client-card__lastcut.is-blank {
+  color: var(--ink-faint);
+  font-weight: 500;
 }
 
 /* Preferências — a anotação "à mão" do barbeiro na ficha */

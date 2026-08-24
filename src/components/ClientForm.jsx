@@ -5,6 +5,7 @@ export default function ClientForm({ client, onSave, onClose }) {
   const editing = Boolean(client);
   const [name, setName] = useState(client?.name ?? "");
   const [email, setEmail] = useState(client?.email ?? "");
+  const [phone, setPhone] = useState(client?.phone ?? "");
   const [notes, setNotes] = useState(client?.notes ?? "");
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
@@ -14,7 +15,7 @@ export default function ClientForm({ client, onSave, onClose }) {
     setError("");
     setBusy(true);
     try {
-      await onSave({ name: name.trim(), email: email.trim(), notes: notes.trim() });
+      await onSave({ name: name.trim(), email: email.trim(), phone: phone.trim(), notes: notes.trim() });
     } catch (err) {
       setError(err.message);
       setBusy(false);
@@ -47,6 +48,18 @@ export default function ClientForm({ client, onSave, onClose }) {
             onChange={(e) => setEmail(e.target.value)}
             placeholder="cliente@email.com"
             required
+          />
+        </div>
+
+        <div className="field">
+          <label htmlFor="cl-phone">WhatsApp (opcional)</label>
+          <input
+            id="cl-phone"
+            type="tel"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            placeholder="Ex.: (11) 98765-4321"
+            maxLength={20}
           />
         </div>
 
