@@ -552,6 +552,22 @@ body::before {
   background: var(--paper-warm);
 }
 
+.appt__who .appt__barber {
+  margin-left: 6px;
+  background: var(--card);
+  border-color: var(--brass-soft);
+  color: var(--brass);
+  font-weight: 700;
+}
+
+/* Escala do profissional escolhido no painel público */
+.booking__schedule {
+  font-size: 0.88rem;
+  color: var(--brass);
+  font-weight: 700;
+  margin: -6px 0 16px;
+}
+
 .appt__actions {
   display: flex;
   gap: 6px;

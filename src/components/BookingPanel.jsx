@@ -24,7 +24,9 @@ function formatLongDate(dateStr) {
 
 export default function BookingPanel() {
   const [services, setServices] = useState([]);
+  const [barbers, setBarbers] = useState([]);
   const [serviceId, setServiceId] = useState("");
+  const [barberId, setBarberId] = useState("");
   const [date, setDate] = useState(toDateInput(nextOpenDay()));
   const [availability, setAvailability] = useState(null); // null = carregando
   const [slot, setSlot] = useState("");
@@ -36,37 +38,58 @@ export default function BookingPanel() {
 
   useEffect(() => {
     publicApi.getServices().then(setServices).catch(() => setServices([]));
+    publicApi.getBarbers().then(setBarbers).catch(() => setBarbers([]));
   }, []);
 
+  // Horários dependem do profissional + dia escolhidos
   useEffect(() => {
-    setAvailability(null);
     setSlot("");
+    if (!barberId) {
+      setAvailability(undefined); // undefined = aguardando escolha do profissional
+      return;
+    }
+    setAvailability(null);
     publicApi
-      .getAvailability(date)
+      .getAvailability(date, barberId)
       .then(setAvailability)
       .catch(() => setAvailability({ open: false, slots: [] }));
-  }, [date]);
+  }, [date, barberId]);
 
-  // Se hoje já não tem horário livre (ex.: fim do expediente), o painel
-  // abre direto no próximo dia com horários — o cliente não cai no vazio
-  const [autoAdvanced, setAutoAdvanced] = useState(false);
+  // Se o dia atual não tem horário para o profissional (ex.: folga dele),
+  // avança automaticamente para o próximo dia em que ele atende
+  const [autoAdvancedFor, setAutoAdvancedFor] = useState("");
   useEffect(() => {
-    if (autoAdvanced || availability === null) return;
-    setAutoAdvanced(true);
-    const today = toDateInput(new Date());
-    if (date === today && (!availability.open || availability.slots.length === 0)) {
-      const d = new Date();
-      d.setDate(d.getDate() + 1);
-      while (d.getDay() === 0 || d.getDay() === 1) d.setDate(d.getDate() + 1);
-      setDate(toDateInput(d));
+    if (!barberId || availability === null || availability === undefined) return;
+    if (autoAdvancedFor === barberId) return;
+    setAutoAdvancedFor(barberId);
+    if (!availability.open || availability.slots.length === 0) {
+      const findNext = async () => {
+        const d = new Date(`${date}T12:00:00`);
+        for (let i = 1; i <= 7; i++) {
+          d.setDate(d.getDate() + 1);
+          if (d.getDay() === 0 || d.getDay() === 1) continue;
+          const probe = toDateInput(d);
+          try {
+            const av = await publicApi.getAvailability(probe, barberId);
+            if (av.open && av.slots.length > 0) {
+              setDate(probe);
+              return;
+            }
+          } catch {
+            return;
+          }
+        }
+      };
+      findNext();
     }
-  }, [availability, autoAdvanced, date]);
+  }, [availability, autoAdvancedFor, barberId, date]);
 
   async function handleSubmit(e) {
     e.preventDefault();
     setError("");
 
     if (!serviceId) return setError("Escolha o serviço.");
+    if (!barberId) return setError("Escolha o profissional.");
     if (!slot) return setError("Escolha um horário disponível.");
     if (!name.trim() || !email.trim()) return setError("Preencha seu nome e email.");
 
@@ -76,11 +99,13 @@ export default function BookingPanel() {
         name: name.trim(),
         email: email.trim(),
         serviceId: Number(serviceId),
+        barberId: Number(barberId),
         scheduledAt: slot,
       });
       const chosen = availability.slots.find((s) => s.iso === slot);
       setDone({
         service: services.find((s) => s.id === Number(serviceId))?.name,
+        barber: barbers.find((b) => b.id === Number(barberId))?.name,
         date: formatLongDate(date),
         time: chosen?.label,
         email: email.trim(),
@@ -88,7 +113,7 @@ export default function BookingPanel() {
     } catch (err) {
       setError(err.message);
       // O horário pode ter sido ocupado enquanto o cliente escolhia
-      publicApi.getAvailability(date).then(setAvailability).catch(() => {});
+      publicApi.getAvailability(date, barberId).then(setAvailability).catch(() => {});
       setSlot("");
     } finally {
       setBusy(false);
@@ -101,7 +126,9 @@ export default function BookingPanel() {
         <span className="booking-done__mark">✓</span>
         <h3>Horário confirmado</h3>
         <p>
-          <strong>{done.service}</strong> · {done.date} às <strong>{done.time}</strong>
+          <strong>{done.service}</strong> com <strong>{done.barber}</strong>
+          <br />
+          {done.date} às <strong>{done.time}</strong>
         </p>
         <p className="booking-done__note">
           Enviamos a confirmação para <strong>{done.email}</strong>. Se precisar remarcar, fale com
@@ -112,7 +139,7 @@ export default function BookingPanel() {
           onClick={() => {
             setDone(null);
             setSlot("");
-            publicApi.getAvailability(date).then(setAvailability).catch(() => {});
+            publicApi.getAvailability(date, barberId).then(setAvailability).catch(() => {});
           }}
         >
           Fazer outro agendamento
@@ -120,6 +147,8 @@ export default function BookingPanel() {
       </div>
     );
   }
+
+  const selectedBarber = barbers.find((b) => b.id === Number(barberId));
 
   return (
     <form className="booking" onSubmit={handleSubmit}>
@@ -138,29 +167,51 @@ export default function BookingPanel() {
           </select>
         </div>
         <div className="field">
-          <label htmlFor="bk-date">Dia</label>
-          <input
-            id="bk-date"
-            type="date"
-            value={date}
-            min={toDateInput(new Date())}
-            onChange={(e) => setDate(e.target.value)}
-          />
+          <label htmlFor="bk-barber">Profissional</label>
+          <select id="bk-barber" value={barberId} onChange={(e) => setBarberId(e.target.value)}>
+            <option value="">Escolha o profissional...</option>
+            {barbers.map((b) => (
+              <option key={b.id} value={b.id}>
+                {b.name}
+              </option>
+            ))}
+          </select>
         </div>
+      </div>
+
+      {selectedBarber && (
+        <p className="booking__schedule">
+          {selectedBarber.name} atende {selectedBarber.schedule}.
+        </p>
+      )}
+
+      <div className="field">
+        <label htmlFor="bk-date">Dia</label>
+        <input
+          id="bk-date"
+          type="date"
+          value={date}
+          min={toDateInput(new Date())}
+          onChange={(e) => setDate(e.target.value)}
+        />
       </div>
 
       <div className="field">
         <label>Horários disponíveis · {formatLongDate(date)}</label>
+        {availability === undefined && (
+          <p className="booking__hint">Escolha o profissional para ver os horários.</p>
+        )}
         {availability === null && <p className="booking__hint">Carregando horários...</p>}
-        {availability !== null && !availability.open && (
+        {availability && !availability.open && (
           <p className="booking__hint">
-            Não abrimos neste dia (fechamos domingo e segunda). Escolha outra data.
+            {selectedBarber ? `${selectedBarber.name} não atende neste dia.` : "Fechado neste dia."}{" "}
+            Escolha outra data.
           </p>
         )}
-        {availability !== null && availability.open && availability.slots.length === 0 && (
+        {availability && availability.open && availability.slots.length === 0 && (
           <p className="booking__hint">Sem horários livres neste dia. Tente outra data.</p>
         )}
-        {availability !== null && availability.slots.length > 0 && (
+        {availability && availability.open && availability.slots.length > 0 && (
           <div className="slot-grid">
             {availability.slots.map((s) => (
               <button

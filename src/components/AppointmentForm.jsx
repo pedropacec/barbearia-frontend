@@ -19,12 +19,13 @@ function nextHalfHour() {
   return d;
 }
 
-export default function AppointmentForm({ appointment, clients, services, onSave, onClose }) {
+export default function AppointmentForm({ appointment, clients, services, barbers, onSave, onClose }) {
   const editing = Boolean(appointment);
   const initial = editing ? new Date(appointment.scheduledAt) : nextHalfHour();
 
   const [clientId, setClientId] = useState(appointment?.client.id ?? "");
   const [serviceId, setServiceId] = useState(appointment?.service.id ?? "");
+  const [barberId, setBarberId] = useState(appointment?.barber?.id ?? "");
   const [date, setDate] = useState(toDateInput(initial));
   const [time, setTime] = useState(toTimeInput(initial));
   const [error, setError] = useState("");
@@ -42,7 +43,12 @@ export default function AppointmentForm({ appointment, clients, services, onSave
     try {
       // Data e hora locais viram um instante único (ISO) para a API
       const scheduledAt = new Date(`${date}T${time}`).toISOString();
-      await onSave({ clientId: Number(clientId), serviceId: Number(serviceId), scheduledAt });
+      await onSave({
+        clientId: Number(clientId),
+        serviceId: Number(serviceId),
+        barberId: barberId ? Number(barberId) : null,
+        scheduledAt,
+      });
     } catch (err) {
       setError(err.message);
       setBusy(false);
@@ -78,6 +84,18 @@ export default function AppointmentForm({ appointment, clients, services, onSave
             {services.map((s) => (
               <option key={s.id} value={s.id}>
                 {s.name}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="field">
+          <label htmlFor="ap-barber">Profissional</label>
+          <select id="ap-barber" value={barberId} onChange={(e) => setBarberId(e.target.value)}>
+            <option value="">Definir depois</option>
+            {barbers.map((b) => (
+              <option key={b.id} value={b.id}>
+                {b.name} · {b.schedule}
               </option>
             ))}
           </select>

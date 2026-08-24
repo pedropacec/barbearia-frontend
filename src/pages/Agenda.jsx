@@ -32,6 +32,7 @@ export default function Agenda() {
   const [appointments, setAppointments] = useState(null);
   const [clients, setClients] = useState([]);
   const [services, setServices] = useState([]);
+  const [barbers, setBarbers] = useState([]);
   const [period, setPeriod] = useState("semana");
   const [formOpen, setFormOpen] = useState(false);
   const [editing, setEditing] = useState(null);
@@ -39,14 +40,16 @@ export default function Agenda() {
   const [deleteBusy, setDeleteBusy] = useState(false);
 
   async function loadAll() {
-    const [appts, cls, svcs] = await Promise.all([
+    const [appts, cls, svcs, brbs] = await Promise.all([
       api.getAppointments(),
       api.getClients(),
       api.getServices(),
+      api.getBarbers(),
     ]);
     setAppointments(appts);
     setClients(cls);
     setServices(svcs);
+    setBarbers(brbs);
   }
 
   useEffect(() => {
@@ -208,6 +211,7 @@ export default function Agenda() {
               <div className="appt__who">
                 <strong>{a.client.name}</strong>
                 <span>{a.service.name}</span>
+                {a.barber && <span className="appt__barber">✂ {a.barber.name}</span>}
               </div>
               <div className="appt__status">
                 <select
@@ -267,6 +271,7 @@ export default function Agenda() {
           appointment={editing}
           clients={clients}
           services={services}
+          barbers={barbers}
           onSave={handleSave}
           onClose={() => {
             setFormOpen(false);

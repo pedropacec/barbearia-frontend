@@ -70,6 +70,7 @@ export const api = {
   deleteClient: (id) => request(`/api/clients/${id}`, { method: "DELETE" }),
 
   getServices: () => request("/api/services"),
+  getBarbers: () => request("/api/barbers"),
 
   getAppointments: () => request("/api/appointments"),
   createAppointment: (data) =>
@@ -87,7 +88,9 @@ export const api = {
 // Rotas públicas do agendamento online (não exigem login)
 export const publicApi = {
   getServices: () => request("/api/public/services"),
-  getAvailability: (date) => request(`/api/public/availability?date=${date}`),
+  getBarbers: () => request("/api/public/barbers"),
+  getAvailability: (date, barberId) =>
+    request(`/api/public/availability?date=${date}&barberId=${barberId}`),
   createBooking: (data) =>
     request("/api/public/bookings", { method: "POST", body: JSON.stringify(data) }),
 };
