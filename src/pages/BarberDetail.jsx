@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { api } from "../api.js";
 import { useToast } from "../toast.jsx";
 import { STATUSES } from "../statuses.js";
@@ -12,40 +12,59 @@ import AppointmentDayGroups, {
 import AppointmentForm from "../components/AppointmentForm.jsx";
 import ConfirmDialog from "../components/ConfirmDialog.jsx";
 
-export default function Agenda() {
+function initials(name) {
+  const parts = name.trim().split(/\s+/);
+  return ((parts[0]?.[0] ?? "") + (parts.length > 1 ? parts[parts.length - 1][0] : "")).toUpperCase();
+}
+
+// Página individual do profissional: a agenda dele, com os mesmos
+// controles da agenda geral
+export default function BarberDetail() {
+  const { id } = useParams();
+  const barberId = Number(id);
   const toast = useToast();
+
+  const [barber, setBarber] = useState(null);
+  const [barbers, setBarbers] = useState([]);
   const [appointments, setAppointments] = useState(null);
   const [clients, setClients] = useState([]);
   const [services, setServices] = useState([]);
-  const [barbers, setBarbers] = useState([]);
   const [period, setPeriod] = useState("semana");
   const [formOpen, setFormOpen] = useState(false);
   const [editing, setEditing] = useState(null);
   const [deleting, setDeleting] = useState(null);
   const [deleteBusy, setDeleteBusy] = useState(false);
-
-  async function loadAll() {
-    const [appts, cls, svcs, brbs] = await Promise.all([
-      api.getAppointments(),
-      api.getClients(),
-      api.getServices(),
-      api.getBarbers(),
-    ]);
-    setAppointments(appts);
-    setClients(cls);
-    setServices(svcs);
-    setBarbers(brbs);
-  }
+  const [notFound, setNotFound] = useState(false);
 
   useEffect(() => {
-    loadAll().catch((err) => toast.show(err.message, "error"));
+    Promise.all([api.getBarbers(), api.getAppointments(barberId), api.getClients(), api.getServices()])
+      .then(([brbs, appts, cls, svcs]) => {
+        const found = brbs.find((b) => b.id === barberId);
+        if (!found) {
+          setNotFound(true);
+          return;
+        }
+        setBarber(found);
+        setBarbers(brbs);
+        setAppointments(appts);
+        setClients(cls);
+        setServices(svcs);
+      })
+      .catch((err) => toast.show(err.message, "error"));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [barberId]);
 
   const groups = useMemo(
     () => (appointments ? groupAppointments(appointments, period) : []),
     [appointments, period]
   );
+
+  const stats = useMemo(() => {
+    if (!appointments) return null;
+    const ativos = appointments.filter((a) => a.status === "agendado").length;
+    const concluidos = appointments.filter((a) => a.status === "concluido").length;
+    return { ativos, concluidos };
+  }, [appointments]);
 
   function bySchedule(a, b) {
     return new Date(a.scheduledAt) - new Date(b.scheduledAt);
@@ -54,11 +73,19 @@ export default function Agenda() {
   async function handleSave(data) {
     if (editing) {
       const updated = await api.updateAppointment(editing.id, data);
-      setAppointments((list) => list.map((a) => (a.id === updated.id ? updated : a)).sort(bySchedule));
+      setAppointments((list) => {
+        // Se o agendamento foi movido para outro profissional, sai desta página
+        const next = updated.barber?.id === barberId
+          ? list.map((a) => (a.id === updated.id ? updated : a))
+          : list.filter((a) => a.id !== updated.id);
+        return next.sort(bySchedule);
+      });
       toast.show("Agendamento atualizado.");
     } else {
       const created = await api.createAppointment(data);
-      setAppointments((list) => [...list, created].sort(bySchedule));
+      if (created.barber?.id === barberId) {
+        setAppointments((list) => [...list, created].sort(bySchedule));
+      }
       toast.show("Agendamento criado. O cliente receberá um e-mail de confirmação.");
     }
     setFormOpen(false);
@@ -67,7 +94,6 @@ export default function Agenda() {
 
   async function handleStatusChange(appointment, status) {
     const previous = appointment.status;
-    // Atualização otimista: a interface responde na hora
     setAppointments((list) =>
       list.map((a) => (a.id === appointment.id ? { ...a, status } : a))
     );
@@ -97,16 +123,43 @@ export default function Agenda() {
     }
   }
 
-  if (!appointments) {
-    return <div className="loading">Carregando a agenda...</div>;
+  if (notFound) {
+    return (
+      <div className="page">
+        <div className="empty">
+          <span className="empty__icon">💈</span>
+          <h4>Profissional não encontrado</h4>
+          <p>
+            <Link to="/profissionais">Voltar para a lista de profissionais</Link>
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!barber || !appointments) {
+    return <div className="loading">Carregando a agenda do profissional...</div>;
   }
 
   return (
     <div className="page">
-      <div className="page-head">
-        <div>
-          <h2>Agenda</h2>
-          <p className="sub">Os agendamentos organizados por data e horário.</p>
+      <p className="crumb">
+        <Link to="/profissionais">← Todos os profissionais</Link>
+      </p>
+
+      <div className="page-head barber-head">
+        <div className="barber-head__id">
+          <div className="client-card__monogram barber-head__monogram" aria-hidden="true">
+            {initials(barber.name)}
+          </div>
+          <div>
+            <h2>{barber.name}</h2>
+            <p className="sub">
+              Atende {barber.schedule} · {stats.ativos}{" "}
+              {stats.ativos === 1 ? "agendamento ativo" : "agendamentos ativos"} ·{" "}
+              {stats.concluidos} {stats.concluidos === 1 ? "concluído" : "concluídos"}
+            </p>
+          </div>
         </div>
         <button
           className="btn btn--primary"
@@ -135,13 +188,9 @@ export default function Agenda() {
 
       {groups.length === 0 && (
         <div className="empty">
-          <span className="empty__icon">💈</span>
-          <h4>Nenhum agendamento por aqui</h4>
-          <p>
-            {period === "todos"
-              ? "Clique em “Novo agendamento” para marcar o primeiro horário."
-              : "Nada marcado para este período. Troque o filtro ou crie um novo agendamento."}
-          </p>
+          <span className="empty__icon">✂️</span>
+          <h4>Nada na agenda de {barber.name.split(" ")[0]}</h4>
+          <p>Nenhum agendamento neste período. Troque o filtro ou crie um novo.</p>
         </div>
       )}
 
@@ -153,29 +202,16 @@ export default function Agenda() {
           setFormOpen(true);
         }}
         onDelete={setDeleting}
+        showBarber={false}
       />
 
-      {formOpen && clients.length === 0 && (
-        <ConfirmDialog
-          title="Cadastre um cliente primeiro"
-          message={
-            <>
-              Todo agendamento precisa estar vinculado a um cliente.{" "}
-              <Link to="/clientes">Vá para a aba Clientes</Link> e cadastre o primeiro.
-            </>
-          }
-          confirmLabel="Entendi"
-          onConfirm={() => setFormOpen(false)}
-          onClose={() => setFormOpen(false)}
-        />
-      )}
-
-      {formOpen && clients.length > 0 && (
+      {formOpen && (
         <AppointmentForm
           appointment={editing}
           clients={clients}
           services={services}
           barbers={barbers}
+          defaultBarberId={barberId}
           onSave={handleSave}
           onClose={() => {
             setFormOpen(false);

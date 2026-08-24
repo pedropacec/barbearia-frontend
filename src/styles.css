@@ -663,6 +663,13 @@ body::before {
   box-shadow: 5px 8px 0 rgba(41, 32, 26, 0.1);
 }
 
+@media (max-width: 720px) {
+  .topbar__nav a {
+    padding: 8px 10px;
+    font-size: 0.85rem;
+  }
+}
+
 .client-card__top {
   display: flex;
   align-items: flex-start;
@@ -773,6 +780,58 @@ body::before {
 .client-card__actions {
   display: flex;
   gap: 6px;
+}
+
+/* Fichas de profissional (reusam o estilo das fichas de cliente) */
+a.barber-card {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+.barber-card__go {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: var(--oxblood);
+  letter-spacing: 0.03em;
+}
+
+.crumb {
+  margin-bottom: 14px;
+  font-size: 0.88rem;
+}
+
+.crumb a {
+  color: var(--ink-soft);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.crumb a:hover {
+  color: var(--ink);
+}
+
+.barber-head__id {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.barber-head__monogram {
+  width: 62px;
+  height: 62px;
+  font-size: 1.4rem;
+}
+
+/* Badge de profissional na agenda vira link para a página dele */
+a.appt__barber {
+  text-decoration: none;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+a.appt__barber:hover {
+  border-color: var(--brass);
+  color: var(--oxblood);
 }
 
 /* ============================ VAZIO / LOADING ============================ */

@@ -19,13 +19,21 @@ function nextHalfHour() {
   return d;
 }
 
-export default function AppointmentForm({ appointment, clients, services, barbers, onSave, onClose }) {
+export default function AppointmentForm({
+  appointment,
+  clients,
+  services,
+  barbers,
+  defaultBarberId,
+  onSave,
+  onClose,
+}) {
   const editing = Boolean(appointment);
   const initial = editing ? new Date(appointment.scheduledAt) : nextHalfHour();
 
   const [clientId, setClientId] = useState(appointment?.client.id ?? "");
   const [serviceId, setServiceId] = useState(appointment?.service.id ?? "");
-  const [barberId, setBarberId] = useState(appointment?.barber?.id ?? "");
+  const [barberId, setBarberId] = useState(appointment?.barber?.id ?? defaultBarberId ?? "");
   const [date, setDate] = useState(toDateInput(initial));
   const [time, setTime] = useState(toTimeInput(initial));
   const [error, setError] = useState("");

@@ -4,6 +4,8 @@ import Landing from "./pages/Landing.jsx";
 import Login from "./pages/Login.jsx";
 import Agenda from "./pages/Agenda.jsx";
 import Clients from "./pages/Clients.jsx";
+import Barbers from "./pages/Barbers.jsx";
+import BarberDetail from "./pages/BarberDetail.jsx";
 import Layout from "./components/Layout.jsx";
 
 // Rota interna: exige funcionário autenticado
@@ -26,6 +28,8 @@ export default function App() {
       {/* Sistema interno (funcionários) */}
       <Route path="/agenda" element={<Protected user={user}><Agenda /></Protected>} />
       <Route path="/clientes" element={<Protected user={user}><Clients /></Protected>} />
+      <Route path="/profissionais" element={<Protected user={user}><Barbers /></Protected>} />
+      <Route path="/profissionais/:id" element={<Protected user={user}><BarberDetail /></Protected>} />
 
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

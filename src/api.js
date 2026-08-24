@@ -72,7 +72,8 @@ export const api = {
   getServices: () => request("/api/services"),
   getBarbers: () => request("/api/barbers"),
 
-  getAppointments: () => request("/api/appointments"),
+  getAppointments: (barberId) =>
+    request(barberId ? `/api/appointments?barberId=${barberId}` : "/api/appointments"),
   createAppointment: (data) =>
     request("/api/appointments", { method: "POST", body: JSON.stringify(data) }),
   updateAppointment: (id, data) =>

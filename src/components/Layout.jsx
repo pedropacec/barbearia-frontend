@@ -14,6 +14,7 @@ export default function Layout({ children }) {
           <nav className="topbar__nav">
             <NavLink to="/agenda">Agenda</NavLink>
             <NavLink to="/clientes">Clientes</NavLink>
+            <NavLink to="/profissionais">Profissionais</NavLink>
           </nav>
           <div className="topbar__user">
             <span className="user-name">
