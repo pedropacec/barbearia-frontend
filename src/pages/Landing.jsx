@@ -60,8 +60,8 @@ export default function Landing() {
         <p className="hero__proof">Há três anos atendendo com hora marcada em São Paulo.</p>
         <figure className="hero__photo">
           <img
-            src="/img/hero.jpg"
-            alt="Cliente recebendo acabamento de barba na tesoura, reclinado na cadeira da barbearia"
+            src="/img/interior.jpg"
+            alt="Salão da Barbearia Vintage: cadeiras de couro vinho, espelhos redondos e piso quadriculado"
           />
         </figure>
       </header>
@@ -127,7 +127,11 @@ export default function Landing() {
               está esperando quando você chega.
             </p>
             <figure className="photo-frame">
-              <img src="/img/casa-pole.jpg" alt="Barber pole e letreiro na fachada da barbearia" loading="lazy" />
+              <img
+                src="/img/fachada.jpg"
+                alt="Fachada da Barbearia Vintage: letreiro dourado sobre madeira vinho e barber pole ao lado da porta"
+                loading="lazy"
+              />
             </figure>
           </div>
           <aside className="band__aside">
